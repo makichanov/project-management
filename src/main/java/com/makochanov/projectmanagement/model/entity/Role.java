@@ -3,6 +3,7 @@ package com.makochanov.projectmanagement.model.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_r_id_seq")
@@ -24,6 +25,11 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     List<User> users;
+
+    @Override
+    public String getAuthority() {
+        return name;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -54,5 +60,4 @@ public class Role {
         sb.append('}');
         return sb.toString();
     }
-
 }

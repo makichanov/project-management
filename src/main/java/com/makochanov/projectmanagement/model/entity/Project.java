@@ -1,6 +1,5 @@
 package com.makochanov.projectmanagement.model.entity;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,7 +32,10 @@ public class Project {
     @Column(name = "p_is_deleted")
     private Boolean isDeleted;
 
-    @OneToMany(mappedBy = "projectId")
+    @Column(name = "p_is_closed")
+    private Boolean isClosed;
+
+    @OneToMany(mappedBy = "project")
     private List<Task> tasks;
 
     @Override
@@ -48,6 +50,7 @@ public class Project {
         if (description != null ? !description.equals(project.description) : project.description != null) return false;
         if (createDate != null ? !createDate.equals(project.createDate) : project.createDate != null) return false;
         if (isDeleted != null ? !isDeleted.equals(project.isDeleted) : project.isDeleted != null) return false;
+        if (isClosed != null ? !isClosed.equals(project.isClosed) : project.isClosed != null) return false;
         return tasks != null ? tasks.equals(project.tasks) : project.tasks == null;
     }
 
@@ -58,6 +61,7 @@ public class Project {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
         result = 31 * result + (isDeleted != null ? isDeleted.hashCode() : 0);
+        result = 31 * result + (isClosed != null ? isClosed.hashCode() : 0);
         result = 31 * result + (tasks != null ? tasks.hashCode() : 0);
         return result;
     }
@@ -70,6 +74,7 @@ public class Project {
         sb.append(", description='").append(description).append('\'');
         sb.append(", createDate=").append(createDate);
         sb.append(", isDeleted=").append(isDeleted);
+        sb.append(", isClosed=").append(isClosed);
         sb.append(", tasks=").append(tasks);
         sb.append('}');
         return sb.toString();

@@ -3,12 +3,10 @@ package com.makochanov.projectmanagement.model.dto;
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class CreatingProjectDto {
 
-    Long id;
+    String name;
 
-    String username;
-
-    private String role;
+    String description;
 
 }

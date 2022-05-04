@@ -1,6 +1,5 @@
 package com.makochanov.projectmanagement.model.dto;
 
-import com.makochanov.projectmanagement.model.entity.Task;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -9,16 +8,18 @@ import java.util.List;
 @Data
 public class ProjectDto {
 
-    private Long id;
+    Long id;
 
-    private String name;
+    String name;
 
-    private String description;
+    String description;
 
-    private Timestamp createDate;
+    Timestamp createDate;
 
-    private Boolean isDeleted;
+    Boolean isDeleted;
 
-    private List<Task> tasks;
+    Boolean isClosed;
+
+    List<TaskDto> tasks;
 
 }

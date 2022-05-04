@@ -2,6 +2,7 @@ package com.makochanov.projectmanagement.service.impl;
 
 import com.makochanov.projectmanagement.exception.ResourceNotFoundException;
 import com.makochanov.projectmanagement.exception.ResourceNotUpdatedException;
+import com.makochanov.projectmanagement.model.dto.CreatingProjectDto;
 import com.makochanov.projectmanagement.model.dto.ProjectCriteriaDto;
 import com.makochanov.projectmanagement.model.dto.ProjectDto;
 import com.makochanov.projectmanagement.model.entity.Project;
@@ -32,6 +33,13 @@ public class ProjectServiceImpl implements ProjectService {
         Optional<Project> project = projectRepository.findById(id);
         Project projectItem = project.orElseThrow(() -> new ResourceNotFoundException("Cannot find project resource with id " + id));
         return conversionService.convert(projectItem, ProjectDto.class);
+    }
+
+    @Override
+    public ProjectDto create(CreatingProjectDto dto) {
+        Project toSave = conversionService.convert(dto,Project.class);
+        Project project = projectRepository.save(toSave);
+        return conversionService.convert(project, ProjectDto.class);
     }
 
     @Override

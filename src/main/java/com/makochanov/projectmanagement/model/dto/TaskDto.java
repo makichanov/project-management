@@ -13,21 +13,21 @@ import java.util.stream.Collectors;
 @Data
 public class TaskDto {
 
-    private Long id;
+    Long id;
 
-    private String name;
+    String name;
 
-    private String description;
+    String description;
 
-    private Boolean isCompleted;
+    Boolean isCompleted;
 
-    private Timestamp createDate;
+    Timestamp createDate;
 
-    private Timestamp completionDate;
+    Timestamp completionDate;
 
-    private Boolean isDeleted;
+    Boolean isDeleted;
 
-    private Project project;
+    ProjectDto project;
 
     public static List<TaskDto> toTaskDtoList(Collection<Task> tasks) {
         TaskToTaskDtoConverter converter = new TaskToTaskDtoConverter();

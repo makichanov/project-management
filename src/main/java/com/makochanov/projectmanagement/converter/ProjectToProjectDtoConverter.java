@@ -1,8 +1,11 @@
 package com.makochanov.projectmanagement.converter;
 
 import com.makochanov.projectmanagement.model.dto.ProjectDto;
+import com.makochanov.projectmanagement.model.dto.TaskDto;
 import com.makochanov.projectmanagement.model.entity.Project;
 import org.springframework.core.convert.converter.Converter;
+
+import java.util.List;
 
 public class ProjectToProjectDtoConverter implements Converter<Project, ProjectDto> {
 
@@ -14,7 +17,8 @@ public class ProjectToProjectDtoConverter implements Converter<Project, ProjectD
        projectDto.setDescription(source.getDescription());
        projectDto.setCreateDate(source.getCreateDate());
        projectDto.setIsDeleted(source.getIsDeleted());
-       projectDto.setTasks(source.getTasks());
+        List<TaskDto> taskDtos = TaskDto.toTaskDtoList(source.getTasks());
+       projectDto.setTasks(taskDtos);
        return projectDto;
     }
 

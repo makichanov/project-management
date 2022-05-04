@@ -2,10 +2,10 @@ package com.makochanov.projectmanagement.service.impl;
 
 import com.makochanov.projectmanagement.exception.ResourceNotFoundException;
 import com.makochanov.projectmanagement.exception.ResourceNotUpdatedException;
-import com.makochanov.projectmanagement.model.dto.TaskDto;
+import com.makochanov.projectmanagement.model.dto.CreatingUserDto;
 import com.makochanov.projectmanagement.model.dto.UserCriteriaDto;
 import com.makochanov.projectmanagement.model.dto.UserDto;
-import com.makochanov.projectmanagement.model.entity.Task;
+import com.makochanov.projectmanagement.model.entity.Role;
 import com.makochanov.projectmanagement.model.entity.User;
 import com.makochanov.projectmanagement.repository.UserRepository;
 import com.makochanov.projectmanagement.service.UserService;
@@ -15,6 +15,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final ConversionService conversionService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDto> findByCriteria(UserCriteriaDto dto) {
@@ -38,6 +40,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User userItem = user.orElseThrow(
                 () -> new ResourceNotFoundException("Cannot find user resource with id " + userId));
         return conversionService.convert(userItem, UserDto.class);
+    }
+
+    @Override
+    public UserDto create(CreatingUserDto dto) {
+        User user = conversionService.convert(dto, User.class);
+        Role role = new Role();
+        role.setName("ROLE_USER");
+        user.setRole(role);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        User createdUser = userRepository.save(user);
+        return conversionService.convert(createdUser, UserDto.class);
     }
 
     @Override

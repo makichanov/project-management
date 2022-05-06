@@ -4,6 +4,7 @@ import com.makichanov.projectmanagement.exception.ResourceNotFoundException;
 import com.makichanov.projectmanagement.model.dto.UserCriteriaDto;
 import com.makichanov.projectmanagement.model.dto.UserDto;
 import com.makichanov.projectmanagement.model.entity.User;
+import com.makichanov.projectmanagement.repository.RoleRepository;
 import com.makichanov.projectmanagement.service.UserService;
 import com.makichanov.projectmanagement.exception.ResourceNotUpdatedException;
 import com.makichanov.projectmanagement.model.dto.CreatingUserDto;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +27,9 @@ import java.util.Optional;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService, UserDetailsService {
 
+    private static final String DEFAULT_USER_ROLE = "ROLE_USER";
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final ConversionService conversionService;
     private final PasswordEncoder passwordEncoder;
 
@@ -43,10 +47,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDto create(CreatingUserDto dto) {
         User user = conversionService.convert(dto, User.class);
-        Role role = new Role();
-        role.setName("ROLE_USER");
+        Role role = loadUserRole(DEFAULT_USER_ROLE);
         user.setRole(role);
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         User createdUser = userRepository.save(user);
@@ -65,6 +69,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
+    }
+
+    private Role loadUserRole(String roleName) {
+        return roleRepository.findByName(roleName);
     }
 
 }

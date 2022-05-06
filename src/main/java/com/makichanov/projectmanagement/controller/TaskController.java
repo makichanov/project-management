@@ -16,11 +16,6 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @GetMapping("/{projectId}")
-    public List<TaskDto> readByProjectId(@PathVariable Long projectId) {
-        return taskService.findByProjectId(projectId);
-    }
-
     @GetMapping("/{id}")
     public TaskDto readById(@PathVariable Long id) {
         return taskService.findById(id);

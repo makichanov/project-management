@@ -1,5 +1,7 @@
 package com.makichanov.projectmanagement.model.entity;
 
+import com.makichanov.projectmanagement.model.audit.AuditableEntity;
+import com.makichanov.projectmanagement.model.audit.EntityListener;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,11 +14,13 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Entity
 @Table(name = "tasks")
-public class Task {
+@EntityListeners(EntityListener.class)
+public class Task implements AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tasks_t_id_seq")
     @SequenceGenerator(name = "tasks_t_id_seq", sequenceName = "tasks_t_id_seq", allocationSize = 1)
+    @Column(name = "t_id")
     private Long id;
 
     @Column(name = "t_name")
@@ -26,7 +30,7 @@ public class Task {
     private String description;
 
     @Column(name = "t_is_completed")
-    private Boolean isCompleted;
+    private Boolean isCompleted = false;
 
     @Column(name = "t_create_date")
     private Timestamp createDate;
@@ -35,7 +39,7 @@ public class Task {
     private Timestamp completionDate;
 
     @Column(name = "t_is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "t_project_id", nullable = false)

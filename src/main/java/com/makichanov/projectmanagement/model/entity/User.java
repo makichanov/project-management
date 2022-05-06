@@ -20,6 +20,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_u_id_seq")
     @SequenceGenerator(name = "users_u_id_seq", sequenceName = "users_u_id_seq", allocationSize = 1)
+    @Column(name = "u_id")
     private Long id;
 
     @Column(name = "u_username")
@@ -29,7 +30,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "u_is_deleted")
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "u_role_id", nullable = false)

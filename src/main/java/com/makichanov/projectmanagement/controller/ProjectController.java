@@ -3,7 +3,9 @@ package com.makichanov.projectmanagement.controller;
 import com.makichanov.projectmanagement.model.dto.ProjectCriteriaDto;
 import com.makichanov.projectmanagement.model.dto.CreatingProjectDto;
 import com.makichanov.projectmanagement.model.dto.ProjectDto;
+import com.makichanov.projectmanagement.model.dto.TaskDto;
 import com.makichanov.projectmanagement.service.ProjectService;
+import com.makichanov.projectmanagement.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final TaskService taskService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -28,6 +31,11 @@ public class ProjectController {
     @ResponseStatus(HttpStatus.OK)
     public ProjectDto read(@PathVariable Long id) {
         return projectService.findById(id);
+    }
+
+    @GetMapping("/{projectId}/tasks")
+    public List<TaskDto> readByProjectId(@PathVariable Long projectId) {
+        return taskService.findByProjectId(projectId);
     }
 
     @PostMapping

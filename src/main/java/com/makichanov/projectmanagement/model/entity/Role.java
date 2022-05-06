@@ -18,13 +18,14 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_r_id_seq")
     @SequenceGenerator(name = "roles_r_id_seq", sequenceName = "roles_r_id_seq", allocationSize = 1)
+    @Column(name = "r_id")
     private Integer id;
 
     @Column(name = "r_name")
     private String name;
 
     @OneToMany(mappedBy = "role")
-    List<User> users;
+    private List<User> users;
 
     @Override
     public String getAuthority() {

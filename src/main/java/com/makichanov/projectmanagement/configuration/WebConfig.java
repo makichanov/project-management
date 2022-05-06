@@ -8,12 +8,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -24,7 +26,7 @@ import java.util.Set;
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.makichanov.projectmanagement.repository")
 @PropertySource("classpath:db/database.properties")
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
 
     @Value("${db.url}")
     private String url;
@@ -68,6 +70,16 @@ public class WebConfig {
         conversionServiceFactoryBean.setConverters(converters);
         conversionServiceFactoryBean.afterPropertiesSet();
         return conversionServiceFactoryBean;
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new CreatingProjectDtoToProjectConverter());
+        registry.addConverter(new CreatingTaskDtoToTaskConverter());
+        registry.addConverter(new CreatingUserDtoToUserConverter());
+        registry.addConverter(new ProjectToProjectDtoConverter());
+        registry.addConverter(new TaskToTaskDtoConverter());
+        registry.addConverter(new UserToUserDtoConverter());
     }
 
     @Bean

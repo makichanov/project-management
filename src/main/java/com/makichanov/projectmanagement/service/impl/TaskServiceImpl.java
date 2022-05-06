@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +44,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public TaskDto create(CreatingTaskDto dto) {
         Task task = conversionService.convert(dto, Task.class);
         Optional<Project> project = projectRepository.findById(dto.getProjectId());
@@ -54,6 +56,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public TaskDto completeTask(Long taskId) {
         int updatedRows = taskRepository.setCompletedStatus(taskId, true);
         if (updatedRows == 0) {

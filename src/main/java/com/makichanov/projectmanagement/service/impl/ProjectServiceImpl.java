@@ -6,12 +6,15 @@ import com.makichanov.projectmanagement.exception.ResourceNotUpdatedException;
 import com.makichanov.projectmanagement.model.dto.CreatingProjectDto;
 import com.makichanov.projectmanagement.model.dto.ProjectDto;
 import com.makichanov.projectmanagement.model.entity.Project;
+import com.makichanov.projectmanagement.model.entity.Role;
 import com.makichanov.projectmanagement.repository.ProjectRepository;
+import com.makichanov.projectmanagement.repository.RoleRepository;
 import com.makichanov.projectmanagement.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +39,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional
     public ProjectDto create(CreatingProjectDto dto) {
         Project toSave = conversionService.convert(dto,Project.class);
         Project project = projectRepository.save(toSave);
@@ -43,6 +47,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional
     public ProjectDto closeProject(Long projectId) {
         int updatedRows = projectRepository.setClosedStatus(projectId, true);
         if (updatedRows == 0) {

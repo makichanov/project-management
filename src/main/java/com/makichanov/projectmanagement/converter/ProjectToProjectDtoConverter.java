@@ -17,6 +17,7 @@ public class ProjectToProjectDtoConverter implements Converter<Project, ProjectD
        projectDto.setDescription(source.getDescription());
        projectDto.setCreateDate(source.getCreateDate());
        projectDto.setIsDeleted(source.getIsDeleted());
+       projectDto.setIsClosed(source.getIsClosed());
         List<TaskDto> taskDtos = TaskDto.toTaskDtoList(source.getTasks());
        projectDto.setTasks(taskDtos);
        return projectDto;

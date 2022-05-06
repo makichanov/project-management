@@ -1,11 +1,15 @@
 package com.makichanov.projectmanagement.model.entity;
 
+import com.makichanov.projectmanagement.model.audit.AuditableEntity;
+import com.makichanov.projectmanagement.model.audit.EntityListener;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -13,11 +17,13 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "projects")
-public class Project {
+@EntityListeners(EntityListener.class)
+public class Project implements AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "projects_p_id_seq")
     @SequenceGenerator(name = "projects_p_id_seq", sequenceName = "projects_p_id_seq", allocationSize = 1)
+    @Column(name = "p_id")
     private Long id;
 
     @Column(name = "p_name")
@@ -30,13 +36,13 @@ public class Project {
     private Timestamp createDate;
 
     @Column(name = "p_is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     @Column(name = "p_is_closed")
-    private Boolean isClosed;
+    private Boolean isClosed = false;
 
     @OneToMany(mappedBy = "project")
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

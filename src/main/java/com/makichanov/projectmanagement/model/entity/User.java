@@ -71,8 +71,7 @@ public class User implements UserDetails {
         if (isDeleted != user.isDeleted) return false;
         if (id != null ? !id.equals(user.id) : user.id != null) return false;
         if (username != null ? !username.equals(user.username) : user.username != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        return role != null ? role.equals(user.role) : user.role == null;
+        return password != null ? password.equals(user.password) : user.password == null;
     }
 
     @Override
@@ -81,7 +80,6 @@ public class User implements UserDetails {
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (isDeleted ? 1 : 0);
-        result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
 
@@ -92,8 +90,8 @@ public class User implements UserDetails {
         sb.append(", username='").append(username).append('\'');
         sb.append(", password='").append(password).append('\'');
         sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", role=").append(role);
         sb.append('}');
         return sb.toString();
     }
+
 }

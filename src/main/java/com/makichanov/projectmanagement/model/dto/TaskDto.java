@@ -26,7 +26,7 @@ public class TaskDto {
 
     Boolean isDeleted;
 
-    ProjectDto project;
+    Long projectId;
 
     public static List<TaskDto> toTaskDtoList(Collection<Task> tasks) {
         TaskToTaskDtoConverter converter = new TaskToTaskDtoConverter();

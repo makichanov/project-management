@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -23,8 +25,16 @@ public class ProjectController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ProjectDto> read(@RequestBody(required = false) ProjectCriteriaDto projectCriteriaDto) {
-        return projectService.findByCriteria(projectCriteriaDto);
+    public List<ProjectDto> read(
+            @RequestBody(required = false) ProjectCriteriaDto projectCriteriaDto,
+            @RequestParam(name = "page", required = false, defaultValue = "0")
+            @Min(value = 0, message = "Page size should be greater than or equal to zero")
+                    Long pageNum,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "50")
+            @Min(value = 1, message = "Page size should be represented as positive number")
+            @Max(value = 100, message = "Page size should not be greater than 100")
+                    Long pageSize) {
+        return projectService.findByCriteria(projectCriteriaDto, pageNum, pageSize);
     }
 
     @GetMapping("/{id}")

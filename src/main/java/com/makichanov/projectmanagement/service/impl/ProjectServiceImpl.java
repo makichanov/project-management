@@ -6,13 +6,13 @@ import com.makichanov.projectmanagement.exception.ResourceNotUpdatedException;
 import com.makichanov.projectmanagement.model.dto.CreatingProjectDto;
 import com.makichanov.projectmanagement.model.dto.ProjectDto;
 import com.makichanov.projectmanagement.model.entity.Project;
-import com.makichanov.projectmanagement.model.entity.Role;
 import com.makichanov.projectmanagement.repository.ProjectRepository;
-import com.makichanov.projectmanagement.repository.RoleRepository;
 import com.makichanov.projectmanagement.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +27,10 @@ public class ProjectServiceImpl implements ProjectService {
     private final ConversionService conversionService;
 
     @Override
-    public List<ProjectDto> findByCriteria(ProjectCriteriaDto dto) {
-        return null;
+    public List<ProjectDto> findByCriteria(ProjectCriteriaDto dto, Long page, Long pageSize) {
+        PageRequest p = PageRequest.of(page.intValue(), pageSize.intValue());
+        Page<Project> projects = projectRepository.findAll(p);
+        return ProjectDto.toProjectDtoList(projects.getContent());
     }
 
     @Override

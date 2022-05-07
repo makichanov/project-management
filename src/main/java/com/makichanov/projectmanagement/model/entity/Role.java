@@ -40,15 +40,13 @@ public class Role implements GrantedAuthority {
         Role role = (Role) o;
 
         if (id != null ? !id.equals(role.id) : role.id != null) return false;
-        if (name != null ? !name.equals(role.name) : role.name != null) return false;
-        return users != null ? users.equals(role.users) : role.users == null;
+        return name != null ? name.equals(role.name) : role.name == null;
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (users != null ? users.hashCode() : 0);
         return result;
     }
 
@@ -57,7 +55,6 @@ public class Role implements GrantedAuthority {
         final StringBuilder sb = new StringBuilder("Role{");
         sb.append("id=").append(id);
         sb.append(", name='").append(name).append('\'');
-        sb.append(", users=").append(users);
         sb.append('}');
         return sb.toString();
     }

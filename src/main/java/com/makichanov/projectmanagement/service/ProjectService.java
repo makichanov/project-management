@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProjectService {
 
-    List<ProjectDto> findByCriteria(ProjectCriteriaDto dto);
+    List<ProjectDto> findByCriteria(ProjectCriteriaDto dto, Long page, Long pageSize);
 
     ProjectDto findById(Long id);
 

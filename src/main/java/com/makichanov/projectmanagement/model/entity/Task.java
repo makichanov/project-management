@@ -59,8 +59,7 @@ public class Task implements AuditableEntity {
         if (createDate != null ? !createDate.equals(task.createDate) : task.createDate != null) return false;
         if (completionDate != null ? !completionDate.equals(task.completionDate) : task.completionDate != null)
             return false;
-        if (isDeleted != null ? !isDeleted.equals(task.isDeleted) : task.isDeleted != null) return false;
-        return project != null ? project.equals(task.project) : task.project == null;
+        return isDeleted != null ? isDeleted.equals(task.isDeleted) : task.isDeleted == null;
     }
 
     @Override
@@ -72,7 +71,6 @@ public class Task implements AuditableEntity {
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
         result = 31 * result + (completionDate != null ? completionDate.hashCode() : 0);
         result = 31 * result + (isDeleted != null ? isDeleted.hashCode() : 0);
-        result = 31 * result + (project != null ? project.hashCode() : 0);
         return result;
     }
 
@@ -86,7 +84,6 @@ public class Task implements AuditableEntity {
         sb.append(", createDate=").append(createDate);
         sb.append(", completionDate=").append(completionDate);
         sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", projectId=").append(project);
         sb.append('}');
         return sb.toString();
     }

@@ -56,8 +56,7 @@ public class Project implements AuditableEntity {
         if (description != null ? !description.equals(project.description) : project.description != null) return false;
         if (createDate != null ? !createDate.equals(project.createDate) : project.createDate != null) return false;
         if (isDeleted != null ? !isDeleted.equals(project.isDeleted) : project.isDeleted != null) return false;
-        if (isClosed != null ? !isClosed.equals(project.isClosed) : project.isClosed != null) return false;
-        return tasks != null ? tasks.equals(project.tasks) : project.tasks == null;
+        return isClosed != null ? isClosed.equals(project.isClosed) : project.isClosed == null;
     }
 
     @Override
@@ -68,7 +67,6 @@ public class Project implements AuditableEntity {
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
         result = 31 * result + (isDeleted != null ? isDeleted.hashCode() : 0);
         result = 31 * result + (isClosed != null ? isClosed.hashCode() : 0);
-        result = 31 * result + (tasks != null ? tasks.hashCode() : 0);
         return result;
     }
 
@@ -81,7 +79,6 @@ public class Project implements AuditableEntity {
         sb.append(", createDate=").append(createDate);
         sb.append(", isDeleted=").append(isDeleted);
         sb.append(", isClosed=").append(isClosed);
-        sb.append(", tasks=").append(tasks);
         sb.append('}');
         return sb.toString();
     }

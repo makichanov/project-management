@@ -1,7 +1,7 @@
 package com.makichanov.projectmanagement.repository.specification;
 
 import com.makichanov.projectmanagement.model.entity.Project;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -9,7 +9,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ProjectsByNamePartSpecification implements Specification<Project> {
 
     private String namePart;
@@ -17,7 +17,7 @@ public class ProjectsByNamePartSpecification implements Specification<Project> {
     @Override
     public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         String formattedNamePart = String.format("%%%s%%", namePart);
-        return criteriaBuilder.like(root.get("p_name"), formattedNamePart);
+        return criteriaBuilder.like(root.get("name"), formattedNamePart);
     }
 
 }

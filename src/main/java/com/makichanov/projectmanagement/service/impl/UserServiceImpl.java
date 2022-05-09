@@ -13,6 +13,8 @@ import com.makichanov.projectmanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,16 +36,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public List<UserDto> findByCriteria(UserCriteriaDto dto) {
-        return null;
+    public List<UserDto> findAll(UserCriteriaDto dto) {
+        Page<User> users = userRepository.findAll(PageRequest.of(dto.getPageNum().intValue(),
+                dto.getPageSize().intValue()));
+        return UserDto.toUserDtoList(users.getContent());
     }
 
     @Override
-    public UserDto findById(Long userId) {
+    public Optional<UserDto> findById(Long userId) {
         Optional<User> user = userRepository.findById(userId);
-        User userItem = user.orElseThrow(
-                () -> new ResourceNotFoundException("Cannot find user resource with id " + userId));
-        return conversionService.convert(userItem, UserDto.class);
+        return user.map(u -> conversionService.convert(u, UserDto.class));
     }
 
     @Override
@@ -58,12 +60,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto delete(Long userId) {
-        int updatedRows = userRepository.setDeletedStatus(userId, true);
-        if (updatedRows == 0) {
-            throw new ResourceNotUpdatedException("Cannot update delete status of user with id " + userId);
-        }
-        return findById(userId);
+    public Optional<UserDto> delete(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        userRepository.deleteById(userId);
+        return user.map(u -> conversionService.convert(u, UserDto.class));
     }
 
     @Override

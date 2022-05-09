@@ -5,15 +5,16 @@ import com.makichanov.projectmanagement.model.dto.UserCriteriaDto;
 import com.makichanov.projectmanagement.model.dto.UserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
-    List<UserDto> findByCriteria(UserCriteriaDto dto);
+    List<UserDto> findAll(UserCriteriaDto dto);
 
-    UserDto findById(Long userId);
+    Optional<UserDto> findById(Long userId);
 
     UserDto create(CreatingUserDto dto);
 
-    UserDto delete(Long userId);
+    Optional<UserDto> delete(Long userId);
 
 }

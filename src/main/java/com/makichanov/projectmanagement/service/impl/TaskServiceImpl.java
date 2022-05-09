@@ -36,11 +36,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDto findById(Long taskId) {
+    public Optional<TaskDto> findById(Long taskId) {
         Optional<Task> task = taskRepository.findById(taskId);
-        Task taskItem = task.orElseThrow(
-                () -> new ResourceNotFoundException("Cannot find task resource with id " + taskId));
-        return conversionService.convert(taskItem, TaskDto.class);
+        return task.map(t -> conversionService.convert(t, TaskDto.class));
     }
 
     @Override
@@ -57,20 +55,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public TaskDto completeTask(Long taskId) {
+    public Optional<TaskDto> completeTask(Long taskId) {
         int updatedRows = taskRepository.setCompletedStatus(taskId, true);
         if (updatedRows == 0) {
             throw new ResourceNotUpdatedException("Cannot update close status of task with id " + taskId);
         }
-        return findById(taskId);
+        Optional<Task> task = taskRepository.findById(taskId);
+        return task.map(t -> conversionService.convert(t, TaskDto.class));
     }
 
     @Override
-    public TaskDto deleteTask(Long taskId) {
-        int updatedRows = taskRepository.setDeletedStatus(taskId, true);
-        if (updatedRows == 0) {
-            throw new ResourceNotUpdatedException("Cannot update delete status of task with id " + taskId);
-        }
-        return findById(taskId);
+    public Optional<TaskDto> deleteTask(Long taskId) {
+        Optional<Task> task = taskRepository.findById(taskId);
+        taskRepository.deleteById(taskId);
+        return task.map(t -> conversionService.convert(t, TaskDto.class));
     }
 }

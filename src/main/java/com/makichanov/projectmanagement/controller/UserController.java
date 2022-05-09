@@ -6,9 +6,11 @@ import com.makichanov.projectmanagement.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -20,19 +22,23 @@ public class UserController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<UserDto> read(@RequestBody UserCriteriaDto dto) {
-        return userService.findByCriteria(dto);
+        return userService.findAll(dto);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public UserDto read(@PathVariable Long id) {
-        return userService.findById(id);
+    public ResponseEntity read(@PathVariable Long id) {
+        Optional<UserDto> user = userService.findById(id);
+        return user.isPresent()
+                ? new ResponseEntity<>(user.get(), HttpStatus.OK)
+                : new ResponseEntity<>(new EmptyJsonResponse(), HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public UserDto delete(@PathVariable Long id) {
-        return userService.delete(id);
+    public ResponseEntity delete(@PathVariable Long id) {
+        Optional<UserDto> user = userService.delete(id);
+        return user.isPresent()
+                ? new ResponseEntity<>(user.get(), HttpStatus.OK)
+                : new ResponseEntity<>(new EmptyJsonResponse(), HttpStatus.NOT_FOUND);
     }
 
 }

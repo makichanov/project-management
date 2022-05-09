@@ -5,6 +5,8 @@ import com.makichanov.projectmanagement.model.audit.EntityListener;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -15,6 +17,8 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "tasks")
 @EntityListeners(EntityListener.class)
+@SQLDelete(sql = "update tasks set t_is_deleted = true where t_id = ?")
+@Where(clause = "t_is_deleted = false")
 public class Task implements AuditableEntity {
 
     @Id

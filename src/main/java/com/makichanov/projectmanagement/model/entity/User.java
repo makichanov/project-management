@@ -3,6 +3,8 @@ package com.makichanov.projectmanagement.model.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,6 +17,8 @@ import java.util.Collections;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
+@SQLDelete(sql = "update projects set u_is_deleted = true where u_id = ?")
+@Where(clause = "u_is_deleted = false")
 public class User implements UserDetails {
 
     @Id

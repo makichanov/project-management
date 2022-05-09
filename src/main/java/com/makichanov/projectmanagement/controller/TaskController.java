@@ -6,11 +6,10 @@ import com.makichanov.projectmanagement.model.dto.CreatingTaskDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tasks")
@@ -20,9 +19,11 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskDto readById(@PathVariable Long id) {
-        return taskService.findById(id);
+    public ResponseEntity readById(@PathVariable Long id) {
+        Optional<TaskDto> task = taskService.findById(id);
+        return task.isPresent()
+                ? new ResponseEntity<>(task.get(), HttpStatus.OK)
+                : new ResponseEntity<>(new EmptyJsonResponse(), HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
@@ -32,15 +33,19 @@ public class TaskController {
     }
 
     @PutMapping("/{taskId}/close")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskDto closeTask(@PathVariable Long taskId) {
-        return taskService.completeTask(taskId);
+    public ResponseEntity closeTask(@PathVariable Long taskId) {
+        Optional<TaskDto> task = taskService.completeTask(taskId);
+        return task.isPresent()
+                ? new ResponseEntity<>(task.get(), HttpStatus.OK)
+                : new ResponseEntity<>(new EmptyJsonResponse(), HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskDto delete(@PathVariable Long id) {
-        return taskService.deleteTask(id);
+    public ResponseEntity delete(@PathVariable Long id) {
+        Optional<TaskDto> task = taskService.deleteTask(id);
+        return task.isPresent()
+                ? new ResponseEntity<>(task.get(), HttpStatus.OK)
+                : new ResponseEntity<>(new EmptyJsonResponse(), HttpStatus.NOT_FOUND);
     }
 
 }

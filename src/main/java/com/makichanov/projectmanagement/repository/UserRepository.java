@@ -20,15 +20,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     User findByUsername(String username);
 
-    /**
-     * Sets deleted status.
-     *
-     * @param userId    the user id
-     * @param isDeleted the is deleted
-     * @return the deleted status
-     */
-    @Modifying
-    @Query("update User u set u.isDeleted = ?2 where u.id = ?1")
-    int setDeletedStatus(Long userId, Boolean isDeleted);
-
 }

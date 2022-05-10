@@ -102,18 +102,18 @@ class TaskServiceTest {
 
     @Test
     void create() {
-        /*Long pId = faker.number().randomNumber();
+        Long pId = faker.number().randomNumber();
         Project p = new Project();
         p.setId(pId);
         when(projectRepository.findById(pId))
                 .thenReturn(Optional.of(p));
-        CreatingTaskDto dto = new CreatingTaskDto();
-        dto.setName(faker.name().name());
-        dto.setDescription(faker.name().name());
-        dto.setProjectId(pId);
         Long tId = faker.number().randomNumber();
         String tName = faker.name().name();
         String tDescription = faker.name().name();
+        CreatingTaskDto dto = new CreatingTaskDto();
+        dto.setName(tName);
+        dto.setDescription(tDescription);
+        dto.setProjectId(pId);
         Task t = new Task();
         t.setName(tName);
         t.setDescription(tDescription);
@@ -129,14 +129,42 @@ class TaskServiceTest {
         TaskDto actual = taskService.create(dto);
         assertEquals(expected, actual);
         verify(projectRepository, times(1)).findById(pId);
-        verify(taskRepository, times(1)).save(t);*/
+        verify(taskRepository, times(1)).save(t);
     }
 
     @Test
     void completeTask() {
+        Long tId = faker.number().randomNumber();
+        when(taskRepository.setCompletedStatus(tId, true))
+                .thenReturn(1);
+        String tName = faker.name().name();
+        Task t = new Task();
+        t.setId(tId);
+        t.setName(tName);
+        t.setProject(new Project());
+        when(taskRepository.findById(tId))
+                .thenReturn(Optional.of(t));
+        TaskDto expected = conversionService.convert(t, TaskDto.class);
+        TaskDto actual = taskService.completeTask(tId).get();
+        assertEquals(expected, actual);
+        verify(taskRepository, times(1)).findById(tId);
+        verify(taskRepository, times(1)).setCompletedStatus(tId, true);
     }
 
     @Test
     void deleteTask() {
+        Long tId = faker.number().randomNumber();
+        String tName = faker.name().name();
+        Task t = new Task();
+        t.setId(tId);
+        t.setName(tName);
+        t.setProject(new Project());
+        when(taskRepository.findById(tId))
+                .thenReturn(Optional.of(t));
+        TaskDto expected = conversionService.convert(t, TaskDto.class);
+        TaskDto actual = taskService.deleteTask(tId).get();
+        assertEquals(expected, actual);
+        verify(taskRepository, times(1)).findById(tId);
+        verify(taskRepository, times(1)).deleteById(tId);
     }
 }
